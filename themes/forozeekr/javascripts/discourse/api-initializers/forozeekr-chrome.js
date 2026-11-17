@@ -14,8 +14,6 @@ const CTA_ES = {
 };
 
 function forceSpanishSignupCta() {
-  // Core es.yml historically lacked value_prop → English fallback. Force the
-  // strings the signup-cta component actually reads (signup_cta.*).
   I18n.translations = I18n.translations || {};
   ["es", "en"].forEach((locale) => {
     I18n.translations[locale] = I18n.translations[locale] || {};
@@ -49,16 +47,37 @@ function isHomePath(path) {
   );
 }
 
+/**
+ * after_header/top HTML is injected inside #main-container (padded column),
+ * which leaves a white gap under the site header. Move the hero to sit
+ * immediately after .d-header-wrap so it reads as flush page chrome.
+ */
 function syncHero() {
   const el = document.querySelector("[data-fz-hero]");
   if (!el) {
     return;
   }
+
   const show =
     (typeof settings === "undefined" || settings.show_hero !== false) &&
     isHomePath(window.location.pathname);
+
   el.classList.toggle("is-home", show);
-  el.style.display = show ? "" : "none";
+
+  if (!show) {
+    el.style.display = "none";
+    return;
+  }
+
+  const header = document.querySelector(".d-header-wrap");
+  if (header && el.parentElement !== header.parentElement) {
+    header.insertAdjacentElement("afterend", el);
+  } else if (header && header.nextElementSibling !== el) {
+    header.insertAdjacentElement("afterend", el);
+  }
+
+  el.style.display = "block";
+  el.style.margin = "0";
 }
 
 export default apiInitializer((api) => {
@@ -68,5 +87,6 @@ export default apiInitializer((api) => {
     syncHero();
   });
   requestAnimationFrame(syncHero);
-  setTimeout(syncHero, 100);
+  setTimeout(syncHero, 50);
+  setTimeout(syncHero, 250);
 });

@@ -67,6 +67,9 @@
   --d-sidebar-link-icon-color: #666666;
   --d-sidebar-prefix-background: #f5f5f5;
   --d-sidebar-prefix-color: #000000;
+
+  /* Topic list headers/values — never wash grey */
+  --d-topic-list-header-text-color: #666666;
 }
 
 html,
@@ -416,26 +419,52 @@ div.signup-cta {
   border-color: var(--zk-line) !important;
 }
 
-/* ----- Hero (home only) — full lineup, no crop ----- */
+/* Topic list meta — Respuestas / Vistas / Actividad readable */
+.topic-list-header,
+.topic-list-header .topic-list-data,
+.topic-list-header .topic-list-data a,
+.topic-list .topic-list-data.num,
+.topic-list .topic-list-data.num a,
+.topic-list .num.posts,
+.topic-list .num.views,
+.topic-list .num.activity,
+.topic-list .num.activity a,
+.topic-list .num .badge-posts,
+.topic-list .num .number,
+.topic-list .relative-date,
+.topic-list .posts-map,
+.topic-list .views .number,
+.latest-topic-list .posts,
+.latest-topic-list .views,
+.category-list .topics,
+.category-list td,
+.category-list th {
+  color: #666666 !important;
+  opacity: 1 !important;
+  -webkit-text-fill-color: #666666 !important;
+}
+
+/* ----- Hero (home only) — flush under header, full bleed, no crop ----- */
+/* JS moves [data-fz-hero] to sit right after .d-header-wrap */
 .fz-hero-banner {
   display: none;
-  width: 100vw;
-  margin-left: calc(50% - 50vw);
-  margin-right: calc(50% - 50vw);
+  width: 100%;
+  margin: 0 !important;
+  padding: 0 !important;
   background: #f5f5f5;
   border: none !important;
   border-bottom: none !important;
   box-shadow: none !important;
 }
 
+.fz-hero-banner.is-home,
 body.categories-list .fz-hero-banner,
 body.navigation-categories .fz-hero-banner,
 body.navigation-topics .fz-hero-banner,
 body.navigation-latest .fz-hero-banner,
 body.navigation-hot .fz-hero-banner,
 body.navigation-new .fz-hero-banner,
-body.navigation-top .fz-hero-banner,
-.fz-hero-banner.is-home {
+body.navigation-top .fz-hero-banner {
   display: block;
 }
 
@@ -445,12 +474,12 @@ body.topic-page .fz-hero-banner {
   display: none !important;
 }
 
-/* Full width, natural aspect — never clip cars with max-height */
 .fz-hero-banner__media {
   box-sizing: border-box;
   width: 100%;
-  max-width: 1296px;
-  margin: 0 auto;
+  max-width: none;
+  margin: 0;
+  padding: 0;
   height: auto;
   max-height: none;
   overflow: visible;
@@ -467,9 +496,10 @@ body.topic-page .fz-hero-banner {
   object-fit: contain;
   object-position: center;
   border: none !important;
+  vertical-align: top;
 }
 
-/* Tabs under hero: tight spacing, no stray hairline */
+/* Home: no white air above content once hero is page chrome */
 body.categories-list #main-outlet,
 body.navigation-categories #main-outlet,
 body.navigation-topics #main-outlet,
@@ -477,7 +507,7 @@ body.navigation-latest #main-outlet,
 body.navigation-hot #main-outlet,
 body.navigation-new #main-outlet,
 body.navigation-top #main-outlet {
-  padding-top: 0.75rem;
+  padding-top: 0.75rem !important;
   border-top: none !important;
   box-shadow: none !important;
 }
