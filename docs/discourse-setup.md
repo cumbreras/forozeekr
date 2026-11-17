@@ -1,114 +1,100 @@
 # Foro Zeekr — Discourse setup
 
-Spanish Zeekr community forum targeting **forozeekr.com**. Local/dev-first on the Mac checkout `~/dev/zeekr-forum` (folder name kept; GitHub repo is `forozeekr`).
+Spanish Zeekr owner community for **forozeekr.com**. Local/dev on `~/dev/zeekr-forum` (folder kept; GitHub repo **forozeekr**).
 
-**GitHub (public):** https://github.com/cumbreras/forozeekr
+**GitHub (public):** https://github.com/cumbreras/forozeekr  
+**Local preview:** http://127.0.0.1:3000/  
+**IA research:** [forum-competitive-analysis.md](./forum-competitive-analysis.md)
 
 ## Current state (2026-11-17)
 
 | Item | Status |
 |------|--------|
-| GitHub | https://github.com/cumbreras/forozeekr (public; renamed from `zeekr-forum`) |
-| Local checkout `~/dev/zeekr-forum` | Scripts, seed, theme placeholders; Discourse clone gitignored under `discourse/` |
-| Runtime | Colima + Docker CLI (Homebrew); no Docker Desktop required |
-| Local Discourse | Official `discourse/discourse_dev:release` (**arm64** works on Apple Silicon) |
-| URL | **http://127.0.0.1:3000** (Rails + rolldown frontend) |
-| Locale | `default_locale=es` |
-| Branding | Title **Foro Zeekr**, teal/graphite color scheme, logo SVG placeholders |
-| Admin (local only) | `admin@forozeekr.local` / `ForoZeekrLocal1!` |
+| Runtime | Colima + Docker; `discourse_dev` arm64 image |
+| Theme direction | **Horizon** (core) + **Foro Zeekr** theme component |
+| Fonts | Inter (`SiteSetting` + Google Fonts in component) |
+| Colors | Teal `#00B3A6` on graphite `#0B1218` (Zeekr.eu / analysis) |
+| Locale | `default_locale=es`, `allow_user_locale=false` (forced ES in local) |
+| Home | Categories + Latest; short car hero; ad slots reserved **off** (v1) |
+| Admin (local) | `admin@forozeekr.local` / `ForoZeekrLocal1!` |
 
-Upstream Discourse source lives at `~/dev/zeekr-forum/discourse/` (**gitignored** — clone via `./scripts/clone-discourse.sh`).
+## Theme approach (Blizzard / Google AI–style)
+
+Polished Discourse communities (Blizzard forums, discuss.ai.google.dev) almost always use:
+
+1. **A modern base theme** (Horizon today) for layout/cards/sidebar chrome  
+2. **A small theme component** for brand CSS, fonts, header/hero HTML, ad placeholders  
+3. **Site settings** for Categories+Latest + sidebar category list — not 50 subforums  
+
+**Recommendation (narrowed):**
+
+| Choice | Why |
+|--------|-----|
+| **Primary: Horizon + Foro Zeekr component** | Closest to Blizzard/Google polish out of the box; component carries Inter, Zeekr colors, short model hero, reserved ad slots |
+| **Fallback: Foundation + same component** | If you need heavier component/plugin CSS compatibility later |
+
+Also installed as selectable previews (not default): **Air**, **Graceful**, **Mint**. Do **not** lock those in.
+
+### Preview / toggle locally
+
+- Default: http://127.0.0.1:3000/ (Horizon + Foro Zeekr)  
+- Theme preview query: `?preview_theme_id=-2` (Horizon), `-1` (Foundation), `1` (Air), `4` (Graceful), `5` (Mint)  
+- Logged-in: Preferences → Interface → Theme  
+- Reinstall component after edits: `./scripts/install-forozeekr-theme.sh`  
+- Component settings (Admin → Customize → Themes → Foro Zeekr): `show_hero` (default on), `show_ad_slots` (default **off** — research: zero ads v1)
 
 ## Local workflow
 
 ```bash
 colima start --cpu 4 --memory 6 --disk 40
 cd ~/dev/zeekr-forum
-./scripts/boot-local.sh    # container + gems/pnpm + DB + Spanish seed
-./scripts/start-app.sh     # Rails :3000 + frontend bundler
-./scripts/stop-app.sh      # stop app processes; keep container
-# optional: cd discourse && ./bin/docker/shutdown_dev
+./scripts/boot-local.sh
+./scripts/start-app.sh
+./scripts/seed-forozeekr.sh            # Spanish IA + tags
+./scripts/install-forozeekr-theme.sh   # Horizon + component
 ```
 
-Ports published on localhost:
+## IA aligned with competitive analysis
 
-| Port | Service |
-|------|---------|
-| 3000 | Discourse web |
-| 8025 | MailHog (when started) |
-| 9292 / 9405 | Dev extras |
+**Intent categories** (≤10–12) + **model tags** (no board explosion):
 
-Re-seed branding/categories anytime: `./scripts/seed-forozeekr.sh`
+| Category | Notes |
+|----------|--------|
+| Bienvenida y reglas | Intros + normas; independent-club tone |
+| Modelos Zeekr | Require model tag |
+| Compra, pedidos y entrega | Wartezimmer threads per model |
+| Carga y autonomía | |
+| Software, app y OTA | |
+| Taller, garantía y seguros | |
+| Accesorios y mods | |
+| Encuentros España | CCAA tags later |
+| Clasificados | Particular↔particular |
+| Off-topic | |
 
-## Spanish localization defaults
+**Tags:** model `001` `7x` `x` `7gt` `009` · intent `entrega` `averia` `ota` `wallbox` `viaje` · Tag group **Modelo**.
 
-Applied by `config/seed_forozeekr.rb`:
+**Evergreen:** “Pedidos y entregas España — Zeekr {MODEL}” in Compra for each model.
 
-- `default_locale = es`
-- User locale allowed; Accept-Language honored
-- Categories: Bienvenida, Modelos Zeekr, Compra y entrega, Carga y autonomía, Software y OTA, Mantenimiento y taller, Accesorios y mods, Encuentros España, Off-topic
-- Welcome topic in **Bienvenida**
+Removed English clutter: Site Feedback, General; Staff → Equipo (restricted); Uncategorized → Sin categoría.
 
-## Branding (safe / no secrets)
+Nav: `top_menu=categories|latest|new|hot`; sidebar `default_navigation_menu_categories` = Spanish intent cats.
 
-- Site title: Foro Zeekr
-- Accent: `#00B3A6` on graphite `#0B1218`
-- Theme component scaffold: `themes/forozeekr/` (about.json, common.scss, logo SVG placeholders)
-- Next: replace SVGs with final logos; install theme component in Admin → Customize → Themes (from git or zip)
+## Branding / hero
+
+- Short graphite hero: wordmark + one mission line + model chips (9X / 7X / 7GT / X / 001)  
+- Not a tall dealer carousel  
+- Ad leaderboard + rail markup present but **hidden** until `show_ad_slots=true`
+
+Theme source: `~/dev/zeekr-forum/themes/forozeekr/`
 
 ## Production path (discourse_docker)
 
-Prefer official [discourse_docker](https://github.com/discourse/discourse_docker) on a 64-bit Linux VPS (2 GB+ RAM). Local `discourse_dev` is for development only.
+Prefer [discourse_docker](https://github.com/discourse/discourse_docker) on a Linux VPS. See `config/production/app.yml.example`. DNS/SMTP for forozeekr.com still user-owned; not required for local work.
 
-1. Point DNS (see below) once the host IP is known.
-2. Install Docker on the VPS; clone `discourse_docker` to `/var/discourse`.
-3. Copy `config/production/app.yml.example` ideas into `containers/app.yml` (`DISCOURSE_HOSTNAME=forozeekr.com`, `DISCOURSE_DEFAULT_LOCALE=es`, SMTP).
-4. `./discourse-setup` or edit `app.yml` then `./launcher rebuild app`.
-5. Create real admin; upload logos; re-apply Spanish categories (adapt seed for prod emails).
-6. Enable Let’s Encrypt templates when DNS already resolves.
+## Next steps
 
-## Domain / DNS / email prerequisites (user configures later)
-
-Live DNS is **not** required for local work.
-
-### DNS (forozeekr.com)
-
-| Record | Name | Value | Notes |
-|--------|------|-------|-------|
-| A (or AAAA) | `@` / `forozeekr.com` | VPS public IP | Apex |
-| A (or CNAME) | `www` | same IP or `forozeekr.com` | Optional redirect |
-| MX | `@` | Provider MX | Only if you receive mail at the domain |
-| TXT | `@` | SPF | e.g. `v=spf1 include:… -all` |
-| TXT | `._domainkey…` / provider DKIM | DKIM keys | From SMTP provider |
-| TXT | `_dmarc` | DMARC policy | Start with `p=none` while testing |
-
-Optional: CDN / proxy (Cloudflare etc.) — if used, configure SSL mode and Discourse `DISCOURSE_CDN_URL` carefully.
-
-### Email (required for production invites / digests / 2FA)
-
-Pick a transactional SMTP provider (examples: Amazon SES, Mailgun, Postmark, Resend). Configure in `app.yml`:
-
-- `DISCOURSE_SMTP_ADDRESS` / `PORT` / `USER_NAME` / `PASSWORD`
-- `DISCOURSE_SMTP_DOMAIN=forozeekr.com`
-- `DISCOURSE_NOTIFICATION_EMAIL=noreply@forozeekr.com`
-
-Verify the sending domain (SPF + DKIM) before inviting users. Local MailHog replaces SMTP in development.
-
-### TLS
-
-- Production: Let’s Encrypt via discourse_docker SSL templates once DNS points at the VPS.
-- Local: HTTP only on `127.0.0.1` is fine.
-
-## What not to do yet
-
-- Do not put production SMTP passwords in this git repo.
-- Do not require live DNS to continue theme/category/plugin work.
-- Do not destroy `discourse/data/postgres` unless intentionally resetting local DB.
-
-## Next concrete steps
-
-1. Replace logo placeholders; install `themes/forozeekr` as a theme component.
-2. Tune color scheme / welcome copy in Spanish with community feedback.
-3. Provision VPS + DNS for `forozeekr.com`.
-4. Stand up `discourse_docker` with SMTP; migrate settings from seed.
-5. Optional: plugins (translate, calendar for encuentros, official SSO later).
+1. Swap logo SVGs for final assets; optional real car stills in hero chips  
+2. Enable Discourse Solved on technical categories; wiki FAQs  
+3. Soft-require model tag in composer (category tag settings)  
+4. VPS + DNS + SMTP for forozeekr.com  
+5. Keep ads off until after launch traffic  
