@@ -416,13 +416,13 @@ div.signup-cta {
   border-color: var(--zk-line) !important;
 }
 
-/* ----- Hero (home only) ----- */
+/* ----- Hero (home only) — short full-width band, preserve aspect ----- */
 .fz-hero-banner {
   display: none;
   width: 100vw;
   margin-left: calc(50% - 50vw);
   margin-right: calc(50% - 50vw);
-  background: #fff;
+  background: #f5f5f5;
   border-bottom: 1px solid var(--zk-line);
 }
 
@@ -443,24 +443,57 @@ body.topic-page .fz-hero-banner {
   display: none !important;
 }
 
+/* ~3:1 band capped short; image fits with contain — no crop/stretch */
 .fz-hero-banner__media {
+  box-sizing: border-box;
   width: 100%;
-  height: 180px;
+  max-width: 1296px;
+  margin: 0 auto;
+  height: min(136px, 32vw);
+  max-height: 136px;
+  display: grid;
+  place-items: center;
   overflow: hidden;
-  background: #ebebeb;
+  background: #f5f5f5;
 }
 
 .fz-hero-banner__img {
   display: block;
-  width: 100%;
-  height: 180px;
-  object-fit: cover;
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
   object-position: center;
 }
 
+/* Coherent spacing: tabs/nav sit tight under the hero */
+body.categories-list #main-outlet,
+body.navigation-categories #main-outlet,
+body.navigation-topics #main-outlet,
+body.navigation-latest #main-outlet,
+body.navigation-hot #main-outlet,
+body.navigation-new #main-outlet,
+body.navigation-top #main-outlet {
+  padding-top: 0.75rem;
+}
+
+body.categories-list .list-controls,
+body.navigation-categories .list-controls,
+body.navigation-topics .list-controls,
+body.navigation-latest .list-controls,
+body.navigation-hot .list-controls,
+body.navigation-new .list-controls,
+body.navigation-top .list-controls,
+body.categories-list .navigation-container,
+body.navigation-categories .navigation-container {
+  margin-top: 0;
+  margin-bottom: 0.75rem;
+}
+
 @media (max-width: 700px) {
-  .fz-hero-banner__media,
-  .fz-hero-banner__img {
-    height: 120px;
+  .fz-hero-banner__media {
+    height: min(96px, 30vw);
+    max-height: 96px;
   }
 }
