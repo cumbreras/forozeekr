@@ -36,6 +36,37 @@
   --secondary-low: #f5f5f5;
   --primary-med-or-secondary-med: #666666;
   --primary-high-or-secondary-low: #24292b;
+
+  /* Optional zeekr accent — links/active only, NEVER sidebar hover bg */
+  --zk-accent: #ff5841;
+
+  /* Sidebar tokens: light wash + black text (primary-100 can go dark in some chains) */
+  --primary-50: #f7f7f7;
+  --primary-100: #f5f5f5;
+  --primary-200: #ebebeb;
+  --d-hover: #f5f5f5;
+  --d-selected: #ebebeb;
+  --token-color-surface: #ffffff;
+  --token-color-surface-hovered: #f5f5f5;
+  --token-color-surface-pressed: #ebebeb;
+  --token-color-surface-selected: #ebebeb;
+  --token-color-text-default: #000000;
+  --token-color-text-subtle: #666666;
+  --d-sidebar-background: #ffffff;
+  --d-sidebar-highlight-background: #f5f5f5;
+  --d-sidebar-highlight-color: #000000;
+  --d-sidebar-highlight-prefix-background: #ebebeb;
+  --d-sidebar-highlight-prefix-color: #000000;
+  --d-sidebar-highlight-hover-background: #ebebeb;
+  --d-sidebar-highlight-hover-icon: #000000;
+  --d-sidebar-active-background: #ebebeb;
+  --d-sidebar-active-color: #000000;
+  --d-sidebar-active-icon-color: #000000;
+  --d-sidebar-active-prefix-background: #f5f5f5;
+  --d-sidebar-link-color: #000000;
+  --d-sidebar-link-icon-color: #666666;
+  --d-sidebar-prefix-background: #f5f5f5;
+  --d-sidebar-prefix-color: #000000;
 }
 
 html,
@@ -144,8 +175,10 @@ body {
 }
 
 .sidebar-container,
-.sidebar-wrapper {
-  background: #fff !important;
+.sidebar-wrapper,
+.sidebar-sections,
+.sidebar-section-wrapper {
+  background: #ffffff !important;
 }
 
 .sidebar-section-header-text {
@@ -156,15 +189,62 @@ body {
   color: var(--zk-text-tertiary) !important;
 }
 
-.sidebar-section-link {
-  border-radius: var(--zk-rd);
-  color: var(--zk-primary) !important;
+/* Sidebar rows: ALWAYS light wash hover/active + black label — never dark pill */
+.sidebar-section-link,
+.sidebar-section-link-wrapper .sidebar-section-link,
+.sidebar-row {
+  border-radius: var(--zk-rd) !important;
+  color: #000000 !important;
+  background: transparent !important;
 }
 
-.sidebar-section-link-wrapper .sidebar-section-link.active {
-  background: rgba(36, 41, 43, 0.06) !important;
-  color: var(--zk-primary) !important;
+.sidebar-section-link .sidebar-section-link-content-text,
+.sidebar-section-link .d-icon,
+.sidebar-section-link-prefix.icon,
+.sidebar-section-link-prefix .d-icon {
+  color: #000000 !important;
+}
+
+.sidebar-section-link-wrapper .sidebar-section-link:hover,
+.sidebar-section-link-wrapper .sidebar-section-link:focus-visible,
+.sidebar-section-link-wrapper.--hovering .sidebar-section-link,
+.sidebar-section-link-wrapper .sidebar-section-link.active,
+.sidebar-section-link-wrapper .sidebar-section-link.--active,
+.sidebar-section-link-wrapper .sidebar-section-link.exact-url-match,
+.hamburger-panel .sidebar-section-link:hover,
+.hamburger-panel .sidebar-section-link.active {
+  background: #f5f5f5 !important;
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+}
+
+.sidebar-section-link-wrapper .sidebar-section-link.active,
+.sidebar-section-link-wrapper .sidebar-section-link.--active,
+.sidebar-section-link-wrapper .sidebar-section-link.exact-url-match {
+  background: #ebebeb !important;
+  color: #000000 !important;
   font-weight: 600;
+}
+
+.sidebar-section-link-wrapper .sidebar-section-link:hover .d-icon,
+.sidebar-section-link-wrapper .sidebar-section-link:hover .sidebar-section-link-content-text,
+.sidebar-section-link-wrapper .sidebar-section-link.active .d-icon,
+.sidebar-section-link-wrapper .sidebar-section-link.active .sidebar-section-link-content-text,
+.sidebar-section-link-wrapper.--hovering .sidebar-section-link .d-icon,
+.sidebar-section-link-wrapper.--hovering .sidebar-section-link .sidebar-section-link-content-text {
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+}
+
+/* Accent only for true links in cooked content — not chrome hover */
+.cooked a,
+.topic-body a:not(.btn):not(.badge-category) {
+  color: var(--zk-accent);
+}
+
+.cooked a:hover,
+.topic-body a:not(.btn):not(.badge-category):hover {
+  color: #d94430;
 }
 
 /* ----- Lists ----- */
