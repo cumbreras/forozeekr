@@ -1,0 +1,18 @@
+# Discourse upstream source (cloned locally; not vendored)
+/discourse/
+/discourse_docker/
+
+# Local secrets / env
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+.endloop/

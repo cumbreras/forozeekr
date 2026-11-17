@@ -1,0 +1,42 @@
+## Example discourse_docker app.yml fragments for forozeekr.com
+## Copy into /var/discourse/containers/app.yml on the production host.
+## Do NOT commit real SMTP passwords or API keys.
+
+## templates:
+##   - "templates/postgres.template.yml"
+##   - "templates/redis.template.yml"
+##   - "templates/web.template.yml"
+##   - "templates/web.ratelimited.template.yml"
+##   - "templates/web.ssl.template.yml"
+##   - "templates/web.letsencrypt.ssl.template.yml"
+
+## expose:
+##   - "80:80"
+##   - "443:443"
+
+env:
+  LANG: en_US.UTF-8
+  # REQUIRED: public hostname
+  DISCOURSE_HOSTNAME: forozeekr.com
+  DISCOURSE_DEFAULT_LOCALE: es
+
+  ## Developer / admin bootstrap emails (comma-separated)
+  DISCOURSE_DEVELOPER_EMAILS: 'you@example.com'
+
+  ## SMTP — choose a provider (examples below). Leave blank until ready.
+  DISCOURSE_SMTP_ADDRESS: smtp.example.com
+  DISCOURSE_SMTP_PORT: 587
+  DISCOURSE_SMTP_USER_NAME: apikey
+  # DISCOURSE_SMTP_PASSWORD: "set-via-host-env-or-secrets-manager"
+  DISCOURSE_SMTP_ENABLE_START_TLS: true
+  DISCOURSE_SMTP_DOMAIN: forozeekr.com
+  DISCOURSE_NOTIFICATION_EMAIL: noreply@forozeekr.com
+
+  ## Optional CDN / MaxMind / etc. later
+  # DISCOURSE_CDN_URL:
+  # DISCOURSE_MAXMIND_ACCOUNT_ID:
+  # DISCOURSE_MAXMIND_LICENSE_KEY:
+
+## After first bootstrap:
+##   ./launcher rebuild app
+## Then in Admin → Settings set title/logo/categories (or re-run seed adapted for prod).

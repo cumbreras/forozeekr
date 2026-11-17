@@ -1,0 +1,21 @@
+/* Foro Zeekr theme component — local placeholder styles.
+   Install in Discourse Admin → Themes → Install from disk / git once logos are final.
+   Palette: graphite base (#0B1218) + teal accent (#00B3A6). */
+
+:root {
+  --forozeekr-accent: #00b3a6;
+  --forozeekr-graphite: #0b1218;
+}
+
+.d-header {
+  border-bottom: 1px solid rgba(0, 179, 166, 0.25);
+}
+
+#site-logo.logo-big,
+#site-logo.logo-small {
+  max-height: 2.4em;
+}
+
+.btn-primary {
+  background: var(--forozeekr-accent);
+}

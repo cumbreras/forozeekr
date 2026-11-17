@@ -1,0 +1,21 @@
+# Reference map of Discourse SiteSettings for Foro Zeekr (local/dev).
+# Applied by config/seed_forozeekr.rb — keep this file as the human-readable checklist.
+
+title: "Foro Zeekr"
+site_description: "Comunidad española de propietarios y entusiastas Zeekr"
+short_site_description: "Comunidad Zeekr en español"
+company_name: "Foro Zeekr"
+default_locale: "es"
+allow_user_locale: true
+set_locale_from_accept_language_header: true
+
+# Local placeholders — replace for production
+contact_email: "admin@forozeekr.local"
+notification_email: "noreply@forozeekr.local"
+
+# Production (set later on discourse_docker / admin UI):
+# force_hostname: "forozeekr.com"
+# force_https: true
+# notification_email: "noreply@forozeekr.com"
+# contact_email: "hola@forozeekr.com"
+# logo / logo_dark / large_icon / favicon / apple_touch_icon via uploads or theme
