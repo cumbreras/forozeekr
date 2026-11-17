@@ -1,12 +1,15 @@
 # Foro Zeekr — Discourse setup
 
-Spanish Zeekr community forum targeting **forozeekr.com**. Local/dev-first on the Mac checkout `~/dev/zeekr-forum`.
+Spanish Zeekr community forum targeting **forozeekr.com**. Local/dev-first on the Mac checkout `~/dev/zeekr-forum` (folder name kept; GitHub repo is `forozeekr`).
+
+**GitHub (public):** https://github.com/cumbreras/forozeekr
 
 ## Current state (2026-11-17)
 
 | Item | Status |
 |------|--------|
-| Repo `~/dev/zeekr-forum` | Was empty (only `.git` / `.endloop`); now has scripts, seed, theme placeholders |
+| GitHub | https://github.com/cumbreras/forozeekr (public; renamed from `zeekr-forum`) |
+| Local checkout `~/dev/zeekr-forum` | Scripts, seed, theme placeholders; Discourse clone gitignored under `discourse/` |
 | Runtime | Colima + Docker CLI (Homebrew); no Docker Desktop required |
 | Local Discourse | Official `discourse/discourse_dev:release` (**arm64** works on Apple Silicon) |
 | URL | **http://127.0.0.1:3000** (Rails + rolldown frontend) |

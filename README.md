@@ -2,6 +2,8 @@
 
 Local Discourse setup for the Spanish Zeekr owner community.
 
+**Public repo:** https://github.com/cumbreras/forozeekr
+
 ## Prerequisites (this Mac)
 
 - Homebrew
