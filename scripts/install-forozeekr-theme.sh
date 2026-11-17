@@ -1,19 +1,19 @@
 #!/usr/bin/env bash
-# Install/update restrained Foro Zeekr theme component on light Horizon.
+# Single path: Foundation + Foro Zeekr component only. Tokens from zeekr-eu-visual-parity.md
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 SRC="${ROOT}/themes/forozeekr"
 DEST="${ROOT}/discourse/tmp/forozeekr-theme"
 
 if ! docker ps --format '{{.Names}}' | grep -qx discourse_dev; then
-  echo "discourse_dev not running"
-  exit 1
+  echo "discourse_dev not running"; exit 1
 fi
 
 rm -rf "${DEST}"
 mkdir -p "${DEST}"
-# copy without huge git noise; include cars + logo
 /bin/cp -R "${SRC}/." "${DEST}/"
+[[ -f "${SRC}/assets/hero.jpg" ]] && /bin/cp -f "${SRC}/assets/hero.jpg" "${DEST}/assets/hero.jpg"
+[[ -f "${SRC}/assets/hero.png" ]] && /bin/cp -f "${SRC}/assets/hero.png" "${DEST}/assets/hero.png"
 
 docker exec -u discourse:discourse -w /src \
   -e RAILS_ENV=development \
@@ -21,6 +21,14 @@ docker exec -u discourse:discourse -w /src \
   -e LD_PRELOAD=/usr/lib/libjemalloc.so \
   discourse_dev bundle exec rails runner '
 dir = "/src/tmp/forozeekr-theme"
+about = File.read("#{dir}/about.json")
+if File.exist?("#{dir}/assets/hero.jpg")
+  about = about.gsub(%r{"hero":\s*"[^"]+"}, "\"hero\": \"assets/hero.jpg\"")
+elsif File.exist?("#{dir}/assets/hero.png")
+  about = about.gsub(%r{"hero":\s*"[^"]+"}, "\"hero\": \"assets/hero.png\"")
+end
+File.write("#{dir}/about.json", about)
+
 existing = Theme.find_by(name: "Foro Zeekr", component: true)
 theme =
   if existing
@@ -30,63 +38,94 @@ theme =
   end
 theme.update!(component: true, user_selectable: false)
 
+# ONE theme path: Foundation + this component
+foundation = Theme.find_by(name: "Foundation")
 horizon = Theme.find_by(name: "Horizon")
-# ensure only this child
-ChildTheme.where(parent_theme_id: horizon.id).where.not(child_theme_id: theme.id).delete_all
-horizon.add_relative_theme!(:child, theme) unless horizon.child_themes.include?(theme)
 
-# Light Zeekr-tinted palette (based on Horizon light, teal tertiary)
+# Detach component from everyone, attach only to Foundation
+ChildTheme.where(child_theme_id: theme.id).delete_all
+ChildTheme.where(parent_theme_id: foundation.id).delete_all
+foundation.add_relative_theme!(:child, theme)
+
+# Disable competing themes as selectable
+Theme.where(component: false).where.not(id: foundation.id).find_each do |t|
+  t.update!(user_selectable: false)
+end
+Theme.where(component: true).where.not(id: theme.id).find_each do |t|
+  t.update!(user_selectable: false)
+end
+
+# zeekr.eu graphite/white palette
 scheme = ColorScheme.find_by(name: "Foro Zeekr Light") || ColorScheme.new(name: "Foro Zeekr Light")
 scheme.user_selectable = true
-scheme.base_scheme_id = "Light" rescue nil
 scheme.colors = [
-  { name: "primary", hex: "0B1218" },
+  { name: "primary", hex: "24292B" },
   { name: "secondary", hex: "FFFFFF" },
-  { name: "tertiary", hex: "00B3A6" },
-  { name: "quaternary", hex: "00B3A6" },
+  { name: "tertiary", hex: "24292B" },
+  { name: "quaternary", hex: "353738" },
   { name: "header_background", hex: "FFFFFF" },
-  { name: "header_primary", hex: "0B1218" },
-  { name: "highlight", hex: "00B3A6" },
+  { name: "header_primary", hex: "232323" },
+  { name: "highlight", hex: "24292B" },
   { name: "danger", hex: "D2211E" },
-  { name: "success", hex: "3AB54A" },
-  { name: "love", hex: "E45735" },
+  { name: "success", hex: "65C466" },
+  { name: "love", hex: "D2211E" },
 ]
 scheme.save!
 
-horizon_dark = ColorScheme.find_by(name: "Horizon Dark")
-horizon.update!(color_scheme_id: scheme.id, dark_color_scheme_id: horizon_dark&.id)
-horizon.set_default!
+foundation.update!(
+  color_scheme_id: scheme.id,
+  dark_color_scheme_id: ColorScheme.find_by(name: "Dark")&.id,
+  user_selectable: true,
+)
+foundation.set_default!
 
 SiteSetting.base_font = "inter"
 SiteSetting.heading_font = "inter"
 SiteSetting.default_locale = "es"
 SiteSetting.allow_user_locale = false
+SiteSetting.top_menu = "categories|latest|new|hot"
+SiteSetting.desktop_category_page_style = "categories_and_latest_topics"
 
-# Prefer our short hero over stock Horizon welcome banner
-rec = ThemeSiteSetting.find_or_initialize_by(theme_id: horizon.id, name: "enable_welcome_banner")
-rec.value = "f"
-rec.save!
-SiteSetting.change_themeable_site_setting(horizon.id, :enable_welcome_banner, false)
+dt = ThemeSiteSetting.where(name: "enable_welcome_banner").pick(:data_type) || 5
+[foundation.id, horizon&.id].compact.uniq.each do |tid|
+  rec = ThemeSiteSetting.find_by(theme_id: tid, name: "enable_welcome_banner")
+  if rec
+    rec.update!(value: "f")
+  else
+    ThemeSiteSetting.create!(theme_id: tid, name: "enable_welcome_banner", data_type: dt, value: "f")
+  end
+  SiteSetting.change_themeable_site_setting(tid, :enable_welcome_banner, false) rescue nil
+end
 
-# Resolve theme asset URLs into after_header (Discourse HTML does not expand {{asset}})
 assets = {}
 theme.theme_fields.where.not(upload_id: nil).each { |f| assets[f.name] = f.upload.url }
-if assets["car-001"]
-  html = theme.theme_fields.find_by(name: "after_header", target_id: 0)&.value.to_s
-  assets.each { |name, url| html = html.gsub("{{#{name}}}", url) }
+field = theme.theme_fields.find_by(name: "after_header", target_id: 0)
+if field
+  html = field.value.to_s
+  assets.each { |n, u| html = html.gsub("{{#{n}}}", u) }
   theme.set_field(target: :common, name: "after_header", value: html)
   theme.save!
 end
 
-# Site logo from theme asset
-if (logo_upload = theme.theme_fields.find_by(name: "logo")&.upload)
-  SiteSetting.logo = logo_upload
-  SiteSetting.logo_small = logo_upload
-  puts "Logo=#{logo_upload.url}"
+if (logo = theme.theme_fields.find_by(name: "logo")&.upload)
+  SiteSetting.logo = logo
+  SiteSetting.logo_small = logo
 end
 
+%w[js.filters.hot.title js.filters.top.title].each do |key|
+  o = TranslationOverride.find_or_initialize_by(locale: "es", translation_key: key)
+  o.value = "Top"
+  o.save!
+end
+I18n.reload! rescue nil
 Stylesheet::Manager.clear_theme_cache! rescue nil
-puts "OK theme=#{theme.id} children=#{horizon.reload.child_themes.map(&:name)} scheme=#{horizon.color_scheme.name}"
-puts "welcome_banner=#{ThemeSiteSetting.find_by(theme_id: horizon.id, name: "enable_welcome_banner")&.value}"
+
+puts "DEFAULT=#{Theme.find_default.name}"
+puts "CHILDREN=#{Theme.find_default.child_themes.map(&:name)}"
+puts "SELECTABLE=#{Theme.where(user_selectable: true, component: false).pluck(:name)}"
+puts "LOGO=#{SiteSetting.logo}"
+puts "HERO=#{assets["hero"]}"
+puts "HOT=#{I18n.t("js.filters.hot.title", locale: :es)}"
 '
 echo "Hard-refresh http://127.0.0.1:3000/"
+echo "Custom hero: themes/forozeekr/assets/hero.jpg then re-run"

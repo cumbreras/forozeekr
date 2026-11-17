@@ -1,157 +1,203 @@
-/* Foro Zeekr — restrained light brand layer on Horizon.
-   Goal: Zeekr.eu light surfaces + teal accent. Few overrides. */
+/* Foro Zeekr — single component on Foundation.
+   Tokens from docs/zeekr-eu-visual-parity.md (live zeekr.eu). */
 
 :root {
-  --fz-teal: #00b3a6;
-  --fz-ink: #0b1218;
-  --fz-muted: #5c656c;
-  --fz-line: rgba(11, 18, 24, 0.08);
-  --fz-paper: #ffffff;
-  --fz-wash: #f5f7f7;
+  --zk-primary: #24292b;
+  --zk-primary-hover: #353738;
+  --zk-primary-active: #040505;
+  --zk-text: #000000;
+  --zk-text-secondary: #666666;
+  --zk-text-tertiary: #939393;
+  --zk-logo: #232323;
+  --zk-bg: #ffffff;
+  --zk-wash: #f5f5f5;
+  --zk-line: rgba(36, 41, 43, 0.12);
+  --zk-rd: 2px;
 }
 
 html,
 body,
 .d-header,
 .sidebar-wrapper,
-#main-outlet {
-  font-family: "Inter", var(--font-family), system-ui, sans-serif;
+#main-outlet,
+.btn,
+input,
+textarea,
+select {
+  font-family: "Inter", "SF Pro Text", system-ui, -apple-system, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif !important;
 }
 
-/* Light page wash — subtle, not a dark skin */
 body {
-  background: var(--fz-wash);
+  background: var(--zk-wash);
+  color: var(--zk-text);
 }
 
+/* ----- Header ----- */
 .d-header {
-  background: rgba(255, 255, 255, 0.92);
-  border-bottom: 1px solid var(--fz-line);
-  box-shadow: none;
+  background: #ffffff !important;
+  border-bottom: 1px solid var(--zk-line) !important;
+  box-shadow: none !important;
+  height: 4rem;
 }
 
-.d-header .title {
-  font-weight: 700;
-  letter-spacing: -0.02em;
+.d-header .contents {
+  max-width: 1296px;
+  margin: 0 auto;
 }
 
 #site-logo {
-  max-height: 2rem;
+  max-height: 1.25rem !important;
+  width: auto;
+}
+
+.d-header .title {
+  display: flex;
+  align-items: center;
+}
+
+/* Prefer logo mark only — hide duplicate text title if present */
+.d-header .title .header-logo-wrapper + span,
+.d-header .forum-title {
+  display: none !important;
+}
+
+.d-header-icons .icon {
+  border-radius: var(--zk-rd);
+  color: var(--zk-primary);
+}
+
+/* ----- Buttons ----- */
+.btn,
+.btn-default {
+  border-radius: var(--zk-rd) !important;
 }
 
 .btn-primary,
-.btn.create {
-  background: var(--fz-ink);
-  border-color: var(--fz-ink);
-  border-radius: 8px;
+.btn.create,
+#create-topic {
+  background: var(--zk-primary) !important;
+  border-color: var(--zk-primary) !important;
+  color: #fff !important;
+  border-radius: var(--zk-rd) !important;
   font-weight: 600;
+  letter-spacing: 0.02em;
 }
 
 .btn-primary:hover,
-.btn.create:hover {
-  background: #1a2228;
-  border-color: #1a2228;
+.btn.create:hover,
+#create-topic:hover {
+  background: var(--zk-primary-hover) !important;
+  border-color: var(--zk-primary-hover) !important;
 }
 
-a,
-.badge-category__name {
-  /* keep Discourse link color mostly; nudge tertiary via palette */
+.btn-primary:active,
+.btn.create:active {
+  background: var(--zk-primary-active) !important;
 }
 
-/* Home hero — short, light, photo lineup */
-.fz-home {
-  display: none;
-  max-width: 1100px;
-  margin: 0.75rem auto 1rem;
-  padding: 0 1rem;
+/* ----- Top nav tabs ----- */
+.nav-pills > li > a {
+  border-radius: var(--zk-rd);
+  font-weight: 500;
+  color: var(--zk-text-secondary);
 }
 
-body.categories-list .fz-home,
-body.navigation-categories .fz-home,
-body.navigation-topics .fz-home,
-body.navigation-latest .fz-home,
-body.navigation-hot .fz-home,
-body.navigation-new .fz-home,
-.fz-home.is-home {
-  display: block;
-}
-
-.fz-hero {
-  background: var(--fz-paper);
-  border: 1px solid var(--fz-line);
-  border-radius: 12px;
-  padding: 1rem 1.1rem 1.1rem;
-}
-
-.fz-hero__eyebrow {
-  margin: 0;
-  font-size: 0.72rem;
+.nav-pills > li > a.active {
+  color: var(--zk-primary);
   font-weight: 600;
+  background: transparent;
+}
+
+/* ----- Sidebar ----- */
+.sidebar-container,
+.sidebar-wrapper {
+  background: #fff;
+}
+
+.sidebar-section-header-text {
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--fz-teal);
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--zk-text-tertiary);
 }
 
-.fz-hero__title {
-  margin: 0.15rem 0 0;
-  font-size: 1.5rem;
-  font-weight: 700;
-  letter-spacing: -0.03em;
-  color: var(--fz-ink);
-  line-height: 1.2;
+.sidebar-section-link {
+  border-radius: var(--zk-rd);
+  color: var(--zk-primary);
 }
 
-.fz-hero__lede {
-  margin: 0.35rem 0 0.9rem;
-  max-width: 40rem;
-  color: var(--fz-muted);
-  font-size: 0.95rem;
-  line-height: 1.45;
+.sidebar-section-link-wrapper .sidebar-section-link.active {
+  background: rgba(36, 41, 43, 0.06);
+  color: var(--zk-primary);
+  font-weight: 600;
 }
 
-.fz-lineup {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 0.65rem;
+/* ----- Lists / categories ----- */
+.topic-list-item,
+.category-list tbody tr {
+  border-color: var(--zk-line) !important;
 }
 
-.fz-car {
+.category-list .category,
+.category-boxes .category-box,
+.latest-topic-list .latest-topic-list-item {
+  border: 1px solid var(--zk-line) !important;
+  border-radius: 4px !important;
+  background: #fff !important;
+  box-shadow: none !important;
+}
+
+.badge-category__wrapper .badge-category {
+  border-radius: var(--zk-rd);
+}
+
+/* Main column width cue (~zeekr maxer) */
+#main-outlet,
+.wrap {
+  max-width: 1296px;
+}
+
+/* ----- Full-width short hero (custom image) ----- */
+.fz-hero-banner {
+  display: none;
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  background: #fff;
+  border-bottom: 1px solid var(--zk-line);
+}
+
+body.categories-list .fz-hero-banner,
+body.navigation-categories .fz-hero-banner,
+body.navigation-topics .fz-hero-banner,
+body.navigation-latest .fz-hero-banner,
+body.navigation-hot .fz-hero-banner,
+body.navigation-new .fz-hero-banner,
+body.navigation-top .fz-hero-banner,
+.fz-hero-banner.is-home {
   display: block;
-  color: var(--fz-ink);
-  text-decoration: none;
 }
 
-.fz-car img {
+.fz-hero-banner__media {
+  width: 100%;
+  height: 180px;
+  overflow: hidden;
+  background: #ebebeb;
+}
+
+.fz-hero-banner__img {
   display: block;
   width: 100%;
-  aspect-ratio: 16 / 10;
+  height: 180px;
   object-fit: cover;
-  border-radius: 8px;
-  background: #e8ecec;
-  border: 1px solid var(--fz-line);
+  object-position: center;
 }
 
-.fz-car span {
-  display: block;
-  margin-top: 0.35rem;
-  font-size: 0.85rem;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  text-align: center;
-}
-
-.fz-car:hover img {
-  border-color: rgba(0, 179, 166, 0.55);
-}
-
-@media (max-width: 720px) {
-  .fz-lineup {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .fz-hero__title {
-    font-size: 1.3rem;
+@media (max-width: 700px) {
+  .fz-hero-banner__media,
+  .fz-hero-banner__img {
+    height: 120px;
   }
 }

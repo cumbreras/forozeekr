@@ -16,8 +16,8 @@ function isHomePath(path) {
   );
 }
 
-function syncHome() {
-  const el = document.querySelector("[data-fz-home]");
+function syncHero() {
+  const el = document.querySelector("[data-fz-hero]");
   if (!el) {
     return;
   }
@@ -29,7 +29,7 @@ function syncHome() {
 }
 
 export default apiInitializer((api) => {
-  api.onPageChange(syncHome);
-  requestAnimationFrame(syncHome);
-  setTimeout(syncHome, 100);
+  api.onPageChange(syncHero);
+  requestAnimationFrame(syncHero);
+  setTimeout(syncHero, 100);
 });

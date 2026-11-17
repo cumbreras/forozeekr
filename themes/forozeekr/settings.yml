@@ -1,9 +1,4 @@
 show_hero:
   default: true
   type: bool
-  description: "Mostrar franja corta de modelos en inicio/categorías."
-
-show_ad_slots:
-  default: false
-  type: bool
-  description: "Huecos publicitarios reservados (v1: desactivados)."
+  description: "Mostrar franja hero a ancho completo bajo el header."

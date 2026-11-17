@@ -11,12 +11,12 @@ Spanish Zeekr owner community for **forozeekr.com**. Local/dev on `~/dev/zeekr-f
 | Item | Status |
 |------|--------|
 | Runtime | Colima + Docker; `discourse_dev` arm64 image |
-| Baseline | Light **Horizon** (stock chrome usable without brand overlay) |
-| Brand layer | Restrained **Foro Zeekr** component (v0.3) — few CSS overrides |
-| Fonts | Inter |
-| Colors | Light surfaces; teal `#00B3A6`; ink `#0B1218` (`Foro Zeekr Light` palette) |
-| Logo | Foro Zeekr SVG wordmark (replaces Discourse sketch) |
-| Home | Stock Horizon welcome **off**; short light photo hero (001 / 7X / X / 009) |
+| Theme path | **Foundation** + **Foro Zeekr** component only (Horizon/Air/Graceful/Mint not selectable) |
+| Brand layer | zeekr.eu token-mapped component (v0.4) — see `zeekr-eu-visual-parity.md` |
+| Fonts | Inter (stand-in for ZeekrText) + SF Pro / system fallbacks |
+| Colors | Graphite `#24292B` / white / wash `#F5F5F5` (live zeekr.eu) |
+| Logo | Tracked caps `FORO ZEEKR` SVG `#232323` |
+| Home | Full-width short hero **placeholder** for custom image; welcome banner off; no car strip |
 | Locale / IA | Spanish forced; intent categories + model tags; Clasificados |
 | Ads | Reserved off (v1) |
 | Admin (local) | `admin@forozeekr.local` / `ForoZeekrLocal1!` |

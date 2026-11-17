@@ -1,0 +1,9 @@
+es:
+  js:
+    filters:
+      hot:
+        title: "Top"
+        help: "Temas destacados"
+      top:
+        title: "Top"
+        help: "Temas más votados"

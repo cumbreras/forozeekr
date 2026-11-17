@@ -1,4 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="220" height="40" viewBox="0 0 220 40" role="img" aria-label="Foro Zeekr">
-  <rect x="0" y="8" width="24" height="24" rx="4" fill="#00B3A6"/>
-  <text x="34" y="27" font-family="Inter, Helvetica, Arial, sans-serif" font-size="20" font-weight="700" fill="#0B1218" letter-spacing="-0.02em">Foro Zeekr</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="148" height="22" viewBox="0 0 148 22" role="img" aria-label="Foro Zeekr">
+  <!-- Match zeekr.eu logo language: graphite #232323, tracked caps, no badge -->
+  <text x="0" y="16.5"
+    font-family="Inter, SF Pro Text, Helvetica Neue, Arial, sans-serif"
+    font-size="15"
+    font-weight="600"
+    letter-spacing="0.12em"
+    fill="#232323">FORO ZEEKR</text>
 </svg>
