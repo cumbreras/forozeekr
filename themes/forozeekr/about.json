@@ -4,11 +4,11 @@
   "license_url": null,
   "component": true,
   "authors": "Foro Zeekr",
-  "theme_version": "0.4.0",
+  "theme_version": "0.4.1",
   "minimum_discourse_version": "3.3.0",
   "assets": {
     "logo": "assets/logo.svg",
     "logo-dark": "assets/logo.svg",
-    "hero": "assets/hero-placeholder.svg"
+    "hero": "assets/hero.png"
   }
 }
