@@ -4,10 +4,14 @@
   "license_url": null,
   "component": true,
   "authors": "Foro Zeekr",
-  "theme_version": "0.2.0",
+  "theme_version": "0.3.0",
   "minimum_discourse_version": "3.3.0",
   "assets": {
-    "logo": "assets/logo-placeholder.svg",
-    "logo-dark": "assets/logo-placeholder-dark.svg"
+    "logo": "assets/logo.svg",
+    "logo-dark": "assets/logo.svg",
+    "car-001": "assets/cars/zeekr-001.jpg",
+    "car-7x": "assets/cars/zeekr-7x.jpg",
+    "car-x": "assets/cars/zeekr-x.jpg",
+    "car-009": "assets/cars/zeekr-009.jpg"
   }
 }

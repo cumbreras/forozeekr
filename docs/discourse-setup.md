@@ -11,37 +11,46 @@ Spanish Zeekr owner community for **forozeekr.com**. Local/dev on `~/dev/zeekr-f
 | Item | Status |
 |------|--------|
 | Runtime | Colima + Docker; `discourse_dev` arm64 image |
-| Theme direction | **Horizon** (core) + **Foro Zeekr** theme component |
-| Fonts | Inter (`SiteSetting` + Google Fonts in component) |
-| Colors | Teal `#00B3A6` on graphite `#0B1218` (Zeekr.eu / analysis) |
-| Locale | `default_locale=es`, `allow_user_locale=false` (forced ES in local) |
-| Home | Categories + Latest; short car hero; ad slots reserved **off** (v1) |
+| Baseline | Light **Horizon** (stock chrome usable without brand overlay) |
+| Brand layer | Restrained **Foro Zeekr** component (v0.3) — few CSS overrides |
+| Fonts | Inter |
+| Colors | Light surfaces; teal `#00B3A6`; ink `#0B1218` (`Foro Zeekr Light` palette) |
+| Logo | Foro Zeekr SVG wordmark (replaces Discourse sketch) |
+| Home | Stock Horizon welcome **off**; short light photo hero (001 / 7X / X / 009) |
+| Locale / IA | Spanish forced; intent categories + model tags; Clasificados |
+| Ads | Reserved off (v1) |
 | Admin (local) | `admin@forozeekr.local` / `ForoZeekrLocal1!` |
 
-## Theme approach (Blizzard / Google AI–style)
+## Theme approach (quality over novelty)
 
-Polished Discourse communities (Blizzard forums, discuss.ai.google.dev) almost always use:
+1. Keep **Horizon light** as the usable baseline (detach component anytime if brand experiments go bad).  
+2. Add a **thin** component only: logo, light palette tint, short photo hero, Inter.  
+3. Avoid heavy dark “sticker” CSS on Discourse chrome.
 
-1. **A modern base theme** (Horizon today) for layout/cards/sidebar chrome  
-2. **A small theme component** for brand CSS, fonts, header/hero HTML, ad placeholders  
-3. **Site settings** for Categories+Latest + sidebar category list — not 50 subforums  
+**Primary:** Horizon + Foro Zeekr component. **Fallback:** plain Horizon (`ChildTheme` detach) or Foundation.
 
-**Recommendation (narrowed):**
+### Emergency: restore stock-quality Horizon
 
-| Choice | Why |
-|--------|-----|
-| **Primary: Horizon + Foro Zeekr component** | Closest to Blizzard/Google polish out of the box; component carries Inter, Zeekr colors, short model hero, reserved ad slots |
-| **Fallback: Foundation + same component** | If you need heavier component/plugin CSS compatibility later |
+```bash
+# Detach brand overlay in rails runner, or:
+docker exec -u discourse discourse_dev bundle exec rails runner \
+  'h=Theme.find_by(name:"Horizon"); ChildTheme.where(parent_theme_id:h.id).delete_all; h.update!(color_scheme_id:ColorScheme.find_by(name:"Horizon").id); h.set_default!'
+```
 
-Also installed as selectable previews (not default): **Air**, **Graceful**, **Mint**. Do **not** lock those in.
+### Preview / toggle
 
-### Preview / toggle locally
+- Hard-refresh: http://127.0.0.1:3000/  
+- Plain Horizon preview: `?preview_theme_id=-2` after detaching child, or temporarily disable component in Admin → Themes  
+- Reinstall restrained brand: `./scripts/install-forozeekr-theme.sh`  
+- Component setting: `show_hero` (default on)
 
-- Default: http://127.0.0.1:3000/ (Horizon + Foro Zeekr)  
-- Theme preview query: `?preview_theme_id=-2` (Horizon), `-1` (Foundation), `1` (Air), `4` (Graceful), `5` (Mint)  
-- Logged-in: Preferences → Interface → Theme  
-- Reinstall component after edits: `./scripts/install-forozeekr-theme.sh`  
-- Component settings (Admin → Customize → Themes → Foro Zeekr): `show_hero` (default on), `show_ad_slots` (default **off** — research: zero ads v1)
+### Assets to drop for production polish
+
+| File | Path |
+|------|------|
+| Official logo (SVG/PNG light) | `themes/forozeekr/assets/logo.svg` then `./scripts/install-forozeekr-theme.sh` |
+| Model stills 9X / 7GT (and better EU press of 001/7X/X/009) | `themes/forozeekr/assets/cars/zeekr-{9x,7gt,001,7x,x,009}.jpg` |
+| Attribution | See `themes/forozeekr/assets/cars/ATTRIBUTION.json` (current: Wikimedia CC prototypes) |
 
 ## Local workflow
 
@@ -79,13 +88,12 @@ Removed English clutter: Site Feedback, General; Staff → Equipo (restricted); 
 
 Nav: `top_menu=categories|latest|new|hot`; sidebar `default_navigation_menu_categories` = Spanish intent cats.
 
-## Branding / hero
+## Branding / hero (v0.3 restrained)
 
-- Short graphite hero: wordmark + one mission line + model chips (9X / 7X / 7GT / X / 001)  
-- Not a tall dealer carousel  
-- Ad leaderboard + rail markup present but **hidden** until `show_ad_slots=true`
-
-Theme source: `~/dev/zeekr-forum/themes/forozeekr/`
+- Light paper hero card; photo lineup (not letter tiles); labels under images  
+- Header wordmark SVG; stock “¡Te damos la bienvenida…” banner disabled on Horizon  
+- Minimal SCSS (header border, Inter, button radius, hero grid) — no dark full-page skin  
+- Theme source: `~/dev/zeekr-forum/themes/forozeekr/`
 
 ## Production path (discourse_docker)
 

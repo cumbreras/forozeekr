@@ -1,9 +1,9 @@
 show_hero:
   default: true
   type: bool
-  description: "Mostrar el hero de modelos Zeekr en la página de inicio / categorías."
+  description: "Mostrar franja corta de modelos en inicio/categorías."
 
 show_ad_slots:
   default: false
   type: bool
-  description: "Huecos publicitarios reservados (v1: off; investigación recomienda 0 anuncios al lanzar)."
+  description: "Huecos publicitarios reservados (v1: desactivados)."
