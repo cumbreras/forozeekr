@@ -121,6 +121,16 @@ Acceptable residual: Discourse sidebar + topic list structure, search iconograph
 | Single path Foundation + Foro Zeekr; others not selectable | Done |
 | Buttons graphite 2px radius | Done |
 
+### Pass B — topic page contrast (2026-11-17)
+
+| Requirement | Status |
+|-------------|--------|
+| Map Discourse vars: `--primary=#000`, graphite `#24292B` for buttons, `--primary-medium=#666` for meta | Done |
+| Never use wash `#EBEBEB` / `--primary-low` as text | Done |
+| Signup CTA Spanish `value_prop` (core `client.es.yml` lacked key → English fallback) | Done — yaml patch + TranslationOverride + theme JS force + locale cache clear |
+| Registrarse: white label on graphite (`#fff` on `#24292B`); no blanket `.signup-cta *` color | Done |
+| Topic title `#000`; visits/tags/chips `#666` min | Done |
+
 ### Residual gaps (hard Discourse limits)
 
 1. Cannot reproduce zeekr.eu multi-link marketing nav (Cars/Shop/Discover) — Discourse uses sidebar + top_menu filters.  
