@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="320" height="64" viewBox="0 0 320 64" role="img" aria-label="Foro Zeekr">
-  <rect width="320" height="64" rx="8" fill="#0B1218"/>
-  <rect x="12" y="12" width="40" height="40" rx="8" fill="#00B3A6"/>
-  <text x="68" y="40" font-family="system-ui, sans-serif" font-size="28" font-weight="700" fill="#E8EEF2">Foro Zeekr</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="280" height="48" viewBox="0 0 280 48" role="img" aria-label="Foro Zeekr">
+  <rect width="280" height="48" rx="8" fill="#24292B"/>
+  <rect x="10" y="10" width="28" height="28" rx="6" fill="#0B8F9C"/>
+  <text x="50" y="31" font-family="Inter, system-ui, sans-serif" font-size="20" font-weight="800" fill="#F5F6F6">Foro Zeekr</text>
 </svg>
