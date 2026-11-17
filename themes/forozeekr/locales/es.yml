@@ -7,3 +7,10 @@ es:
       top:
         title: "Top"
         help: "Temas más votados"
+    signup_cta:
+      intro: "¡Hola! Parece que estás disfrutando del tema, pero aún no has creado una cuenta."
+      value_prop: "¿Cansado de perder el hilo? Con una cuenta vuelves justo donde lo dejaste, recibes avisos de nuevas respuestas, guardas favoritos y das me gusta para agradecer. Entre todos hacemos mejor esta comunidad."
+      sign_up: "Registrarse"
+      hide_session: "Tal vez más tarde"
+      hide_forever: "No, gracias"
+      hidden_for_session: "Vale, te lo preguntamos mañana. También puedes usar «Iniciar sesión» para crear tu cuenta."

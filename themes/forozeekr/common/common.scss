@@ -1,5 +1,5 @@
-/* Foro Zeekr — single component on Foundation.
-   Tokens from docs/zeekr-eu-visual-parity.md (live zeekr.eu). */
+/* Foro Zeekr — Foundation component.
+   Light zeekr.eu system ONLY. Topic pages must stay readable. */
 
 :root {
   --zk-primary: #24292b;
@@ -13,6 +13,20 @@
   --zk-wash: #f5f5f5;
   --zk-line: rgba(36, 41, 43, 0.12);
   --zk-rd: 2px;
+
+  /* Force readable Discourse derived tokens on light surfaces */
+  --primary: #24292b;
+  --secondary: #ffffff;
+  --tertiary: #24292b;
+  --header_background: #ffffff;
+  --header_primary: #232323;
+  --primary-high: #000000;
+  --primary-very-high: #000000;
+  --primary-medium: #414445;
+  --primary-low: #e9eaea;
+  --primary-very-low: #f5f5f5;
+  --secondary-high: #ffffff;
+  --secondary-low: #f5f5f5;
 }
 
 html,
@@ -28,9 +42,11 @@ select {
     Roboto, "Helvetica Neue", Arial, sans-serif !important;
 }
 
+html,
 body {
-  background: var(--zk-wash);
-  color: var(--zk-text);
+  background: var(--zk-wash) !important;
+  color: var(--zk-text) !important;
+  color-scheme: light !important;
 }
 
 /* ----- Header ----- */
@@ -56,7 +72,6 @@ body {
   align-items: center;
 }
 
-/* Prefer logo mark only — hide duplicate text title if present */
 .d-header .title .header-logo-wrapper + span,
 .d-header .forum-title {
   display: none !important;
@@ -64,7 +79,7 @@ body {
 
 .d-header-icons .icon {
   border-radius: var(--zk-rd);
-  color: var(--zk-primary);
+  color: var(--zk-primary) !important;
 }
 
 /* ----- Buttons ----- */
@@ -91,28 +106,22 @@ body {
   border-color: var(--zk-primary-hover) !important;
 }
 
-.btn-primary:active,
-.btn.create:active {
-  background: var(--zk-primary-active) !important;
-}
-
-/* ----- Top nav tabs ----- */
+/* ----- Nav / sidebar ----- */
 .nav-pills > li > a {
   border-radius: var(--zk-rd);
   font-weight: 500;
-  color: var(--zk-text-secondary);
+  color: var(--zk-text-secondary) !important;
 }
 
 .nav-pills > li > a.active {
-  color: var(--zk-primary);
+  color: var(--zk-primary) !important;
   font-weight: 600;
-  background: transparent;
+  background: transparent !important;
 }
 
-/* ----- Sidebar ----- */
 .sidebar-container,
 .sidebar-wrapper {
-  background: #fff;
+  background: #fff !important;
 }
 
 .sidebar-section-header-text {
@@ -120,46 +129,168 @@ body {
   text-transform: uppercase;
   font-size: 0.68rem;
   font-weight: 600;
-  color: var(--zk-text-tertiary);
+  color: var(--zk-text-tertiary) !important;
 }
 
 .sidebar-section-link {
   border-radius: var(--zk-rd);
-  color: var(--zk-primary);
+  color: var(--zk-primary) !important;
 }
 
 .sidebar-section-link-wrapper .sidebar-section-link.active {
-  background: rgba(36, 41, 43, 0.06);
-  color: var(--zk-primary);
+  background: rgba(36, 41, 43, 0.06) !important;
+  color: var(--zk-primary) !important;
   font-weight: 600;
 }
 
-/* ----- Lists / categories ----- */
-.topic-list-item,
-.category-list tbody tr {
-  border-color: var(--zk-line) !important;
-}
-
+/* ----- Categories / lists ----- */
 .category-list .category,
 .category-boxes .category-box,
-.latest-topic-list .latest-topic-list-item {
-  border: 1px solid var(--zk-line) !important;
-  border-radius: 4px !important;
+.latest-topic-list .latest-topic-list-item,
+.topic-list-item {
+  border-color: var(--zk-line) !important;
   background: #fff !important;
+  color: var(--zk-text) !important;
   box-shadow: none !important;
 }
 
-.badge-category__wrapper .badge-category {
-  border-radius: var(--zk-rd);
+.topic-list .main-link a.title,
+.topic-list a.title {
+  color: #000 !important;
 }
 
-/* Main column width cue (~zeekr maxer) */
 #main-outlet,
 .wrap {
   max-width: 1296px;
 }
 
-/* ----- Full-width short hero (custom image) ----- */
+/* =========================================================
+   TOPIC PAGE — hard readability bar
+   ========================================================= */
+
+/* 1) Title: near-black on white — never washed / never white-on-gray */
+.topic-title,
+.topic-title h1,
+.topic-title h1 a,
+.fancy-title,
+h1[data-topic-id],
+.extra-info-wrapper .topic-link,
+.extra-info-wrapper .fancy-title {
+  color: #000000 !important;
+  opacity: 1 !important;
+  -webkit-text-fill-color: #000000 !important;
+}
+
+.extra-info-wrapper,
+.title-wrapper,
+.container.posts,
+.topic-body,
+.topic-map,
+#topic-title {
+  background: transparent !important;
+  color: #000 !important;
+}
+
+.topic-body .contents,
+.cooked,
+.cooked p,
+.cooked li {
+  color: #000 !important;
+}
+
+/* 2) Signup CTA — light graphite/white, never navy block */
+.signup-cta,
+.discourse-modal .signup-cta,
+.alert.alert-info.signup-cta,
+div.signup-cta {
+  background: #ffffff !important;
+  color: #24292b !important;
+  border: 1px solid var(--zk-line) !important;
+  border-radius: 4px !important;
+  box-shadow: none !important;
+}
+
+.signup-cta h2,
+.signup-cta h3,
+.signup-cta p,
+.signup-cta,
+.signup-cta * {
+  color: #24292b !important;
+}
+
+.signup-cta a:not(.btn) {
+  color: #24292b !important;
+  text-decoration: underline;
+}
+
+.signup-cta .btn-primary {
+  background: #24292b !important;
+  border-color: #24292b !important;
+  color: #fff !important;
+}
+
+.signup-cta .btn-default,
+.signup-cta .btn-remind,
+.signup-cta .btn-flat {
+  background: #f5f5f5 !important;
+  border: 1px solid var(--zk-line) !important;
+  color: #24292b !important;
+}
+
+/* 3) More topics / suggested — never black bar */
+.more-topics__container,
+.more-topics__lists,
+.more-topics__list,
+.more-topics__list-title,
+.more-topics__browse-more,
+.suggested-topics,
+.suggested-topics-message,
+.suggested-topics .topic-list,
+.suggested-topics .topic-list-body,
+.suggested-topics .topic-list-item,
+.suggested-topics .topic-list th,
+.suggested-topics .topic-list td {
+  background: #ffffff !important;
+  color: #000000 !important;
+  border-color: var(--zk-line) !important;
+}
+
+.more-topics__list-title,
+.more-topics__browse-more,
+.suggested-topics-message,
+.suggested-topics .topic-list .title,
+.suggested-topics a.title,
+.more-topics__container a {
+  color: #000000 !important;
+}
+
+.more-topics__container .nav .btn,
+.more-topics__container .nav-pills > li > a {
+  background: #ffffff !important;
+  color: #24292b !important;
+  border: none !important;
+}
+
+.more-topics__container .nav .btn.active,
+.more-topics__container .nav-pills > li > a.active {
+  color: #000 !important;
+  font-weight: 600;
+  background: #f5f5f5 !important;
+}
+
+/* Topic map / progress / footer chrome stay light */
+.topic-map,
+.topic-map section,
+.topic-timer-info,
+.progress-bar-container,
+#topic-progress-wrapper,
+#topic-progress {
+  background: #ffffff !important;
+  color: #24292b !important;
+  border-color: var(--zk-line) !important;
+}
+
+/* ----- Hero (home only) ----- */
 .fz-hero-banner {
   display: none;
   width: 100vw;
@@ -178,6 +309,13 @@ body.navigation-new .fz-hero-banner,
 body.navigation-top .fz-hero-banner,
 .fz-hero-banner.is-home {
   display: block;
+}
+
+/* Never show hero on topic pages */
+body.archetype-regular .fz-hero-banner,
+body.archetype-banner .fz-hero-banner,
+body.topic-page .fz-hero-banner {
+  display: none !important;
 }
 
 .fz-hero-banner__media {

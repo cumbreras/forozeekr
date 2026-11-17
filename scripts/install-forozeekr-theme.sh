@@ -55,26 +55,36 @@ Theme.where(component: true).where.not(id: theme.id).find_each do |t|
   t.update!(user_selectable: false)
 end
 
-# zeekr.eu graphite/white palette
+# zeekr.eu light palette — primary black for readable titles
 scheme = ColorScheme.find_by(name: "Foro Zeekr Light") || ColorScheme.new(name: "Foro Zeekr Light")
 scheme.user_selectable = true
-scheme.colors = [
-  { name: "primary", hex: "24292B" },
-  { name: "secondary", hex: "FFFFFF" },
-  { name: "tertiary", hex: "24292B" },
-  { name: "quaternary", hex: "353738" },
-  { name: "header_background", hex: "FFFFFF" },
-  { name: "header_primary", hex: "232323" },
-  { name: "highlight", hex: "24292B" },
-  { name: "danger", hex: "D2211E" },
-  { name: "success", hex: "65C466" },
-  { name: "love", hex: "D2211E" },
-]
 scheme.save!
+wanted = {
+  "primary" => "000000",
+  "secondary" => "FFFFFF",
+  "tertiary" => "24292B",
+  "quaternary" => "353738",
+  "header_background" => "FFFFFF",
+  "header_primary" => "232323",
+  "highlight" => "24292B",
+  "danger" => "D2211E",
+  "success" => "65C466",
+  "love" => "D2211E",
+}
+scheme.color_scheme_colors.group_by(&:name).each do |name, rows|
+  keep = rows.max_by(&:id)
+  rows.reject { |r| r.id == keep.id }.each(&:destroy)
+end
+wanted.each do |name, hex|
+  c = scheme.color_scheme_colors.find_or_initialize_by(name: name)
+  c.hex = hex
+  c.save!
+end
 
+# Same light scheme for dark slot — never apply Discourse Dark on topic pages
 foundation.update!(
   color_scheme_id: scheme.id,
-  dark_color_scheme_id: ColorScheme.find_by(name: "Dark")&.id,
+  dark_color_scheme_id: scheme.id,
   user_selectable: true,
 )
 foundation.set_default!
@@ -112,9 +122,17 @@ if (logo = theme.theme_fields.find_by(name: "logo")&.upload)
   SiteSetting.logo_small = logo
 end
 
-%w[js.filters.hot.title js.filters.top.title].each do |key|
+{
+  "js.filters.hot.title" => "Top",
+  "js.filters.top.title" => "Top",
+  "js.signup_cta.intro" => "¡Hola! Parece que estás disfrutando del tema, pero aún no has creado una cuenta.",
+  "js.signup_cta.value_prop" => "¿Cansado de perder el hilo? Con una cuenta vuelves justo donde lo dejaste, recibes avisos de nuevas respuestas, guardas favoritos y das me gusta para agradecer. Entre todos hacemos mejor esta comunidad.",
+  "js.signup_cta.sign_up" => "Registrarse",
+  "js.signup_cta.hide_session" => "Tal vez más tarde",
+  "js.signup_cta.hide_forever" => "No, gracias",
+}.each do |key, value|
   o = TranslationOverride.find_or_initialize_by(locale: "es", translation_key: key)
-  o.value = "Top"
+  o.value = value
   o.save!
 end
 I18n.reload! rescue nil
@@ -126,6 +144,7 @@ puts "SELECTABLE=#{Theme.where(user_selectable: true, component: false).pluck(:n
 puts "LOGO=#{SiteSetting.logo}"
 puts "HERO=#{assets["hero"]}"
 puts "HOT=#{I18n.t("js.filters.hot.title", locale: :es)}"
+puts "CTA=#{I18n.t("js.signup_cta.value_prop", locale: :es)[0,40]}"
 '
 echo "Hard-refresh http://127.0.0.1:3000/"
 echo "Custom hero: themes/forozeekr/assets/hero.jpg then re-run"
