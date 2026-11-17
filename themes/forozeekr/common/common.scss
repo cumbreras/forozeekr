@@ -1,7 +1,8 @@
 /* Foro Zeekr — Foundation component.
-   Light zeekr.eu system ONLY. Topic pages must stay readable. */
+   Tokens from docs/zeekr-eu-visual-parity.md */
 
 :root {
+  /* zeekr.eu authoritative */
   --zk-primary: #24292b;
   --zk-primary-hover: #353738;
   --zk-primary-active: #040505;
@@ -11,22 +12,30 @@
   --zk-logo: #232323;
   --zk-bg: #ffffff;
   --zk-wash: #f5f5f5;
+  --zk-grey: #ebebeb;
   --zk-line: rgba(36, 41, 43, 0.12);
   --zk-rd: 2px;
 
-  /* Force readable Discourse derived tokens on light surfaces */
-  --primary: #24292b;
+  /* Discourse color-scheme mapping (light only)
+     primary = body ink (#000), graphite via --zk-primary for chrome/buttons.
+     Never map text to wash greys (#EBEBEB / primary-low). */
+  --primary: #000000;
   --secondary: #ffffff;
   --tertiary: #24292b;
+  --quaternary: #353738;
   --header_background: #ffffff;
   --header_primary: #232323;
-  --primary-high: #000000;
   --primary-very-high: #000000;
-  --primary-medium: #414445;
-  --primary-low: #e9eaea;
+  --primary-high: #24292b;
+  --primary-medium: #666666;
+  --primary-low-mid: #939393;
+  --primary-low: #ebebeb; /* wash/border ONLY — never text */
   --primary-very-low: #f5f5f5;
   --secondary-high: #ffffff;
+  --secondary-medium: #f7f7f7;
   --secondary-low: #f5f5f5;
+  --primary-med-or-secondary-med: #666666;
+  --primary-high-or-secondary-low: #24292b;
 }
 
 html,
@@ -67,11 +76,6 @@ body {
   width: auto;
 }
 
-.d-header .title {
-  display: flex;
-  align-items: center;
-}
-
 .d-header .title .header-logo-wrapper + span,
 .d-header .forum-title {
   display: none !important;
@@ -82,7 +86,7 @@ body {
   color: var(--zk-primary) !important;
 }
 
-/* ----- Buttons ----- */
+/* ----- Buttons (graphite fill, white label) ----- */
 .btn,
 .btn-default {
   border-radius: var(--zk-rd) !important;
@@ -90,20 +94,40 @@ body {
 
 .btn-primary,
 .btn.create,
-#create-topic {
+#create-topic,
+.signup-cta .btn-primary {
   background: var(--zk-primary) !important;
   border-color: var(--zk-primary) !important;
-  color: #fff !important;
+  color: #ffffff !important;
   border-radius: var(--zk-rd) !important;
   font-weight: 600;
   letter-spacing: 0.02em;
 }
 
+.btn-primary *,
+.btn.create *,
+#create-topic *,
+.signup-cta .btn-primary *,
+.signup-cta .btn-primary .d-button-label,
+.btn-primary .d-button-label {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
 .btn-primary:hover,
 .btn.create:hover,
-#create-topic:hover {
+#create-topic:hover,
+.signup-cta .btn-primary:hover {
   background: var(--zk-primary-hover) !important;
   border-color: var(--zk-primary-hover) !important;
+  color: #ffffff !important;
+}
+
+.btn-primary:active,
+.btn.create:active,
+.signup-cta .btn-primary:active {
+  background: var(--zk-primary-active) !important;
+  color: #ffffff !important;
 }
 
 /* ----- Nav / sidebar ----- */
@@ -143,7 +167,12 @@ body {
   font-weight: 600;
 }
 
-/* ----- Categories / lists ----- */
+/* ----- Lists ----- */
+.topic-list .main-link a.title,
+.topic-list a.title {
+  color: #000000 !important;
+}
+
 .category-list .category,
 .category-boxes .category-box,
 .latest-topic-list .latest-topic-list-item,
@@ -154,21 +183,15 @@ body {
   box-shadow: none !important;
 }
 
-.topic-list .main-link a.title,
-.topic-list a.title {
-  color: #000 !important;
-}
-
 #main-outlet,
 .wrap {
   max-width: 1296px;
 }
 
 /* =========================================================
-   TOPIC PAGE — hard readability bar
+   TOPIC PAGE
    ========================================================= */
 
-/* 1) Title: near-black on white — never washed / never white-on-gray */
 .topic-title,
 .topic-title h1,
 .topic-title h1 a,
@@ -181,24 +204,52 @@ h1[data-topic-id],
   -webkit-text-fill-color: #000000 !important;
 }
 
-.extra-info-wrapper,
-.title-wrapper,
-.container.posts,
-.topic-body,
-.topic-map,
-#topic-title {
-  background: transparent !important;
-  color: #000 !important;
-}
-
 .topic-body .contents,
 .cooked,
 .cooked p,
 .cooked li {
-  color: #000 !important;
+  color: #000000 !important;
 }
 
-/* 2) Signup CTA — light graphite/white, never navy block */
+/* Meta: visits, dates, posters — #666 minimum, never wash grey */
+.topic-map,
+.topic-map *,
+.topic-map .number,
+.topic-map .number .number,
+.topic-map h4,
+.topic-map .topic-map-post,
+.topic-map__contents,
+.topic-map__stats,
+.topic-map__stat-element,
+.topic-map .views,
+.topic-map .likes,
+.topic-meta-data,
+.topic-meta-data *,
+.topic-meta-data .post-info,
+.topic-meta-data .post-info a,
+.topic-meta-data .post-date,
+.post-info.edits,
+.post-info.views,
+.discourse-tag,
+.badge-category__name,
+.badge-category__wrapper,
+.topic-category .badge-category__wrapper,
+.extra-info-wrapper .badge-category__wrapper,
+.extra-info-wrapper .discourse-tag,
+.title-wrapper .topic-category,
+.topic-header-extra,
+.topic-statuses {
+  color: #666666 !important;
+  opacity: 1 !important;
+  -webkit-text-fill-color: #666666 !important;
+}
+
+.badge-category__wrapper .badge-category__name,
+.discourse-tag {
+  color: #666666 !important;
+}
+
+/* Signup CTA — white surface, graphite copy; NEVER paint button labels graphite */
 .signup-cta,
 .discourse-modal .signup-cta,
 .alert.alert-info.signup-cta,
@@ -210,23 +261,16 @@ div.signup-cta {
   box-shadow: none !important;
 }
 
-.signup-cta h2,
-.signup-cta h3,
-.signup-cta p,
-.signup-cta,
-.signup-cta * {
+.signup-cta > h2,
+.signup-cta > h3,
+.signup-cta > p {
   color: #24292b !important;
+  -webkit-text-fill-color: #24292b !important;
 }
 
 .signup-cta a:not(.btn) {
   color: #24292b !important;
   text-decoration: underline;
-}
-
-.signup-cta .btn-primary {
-  background: #24292b !important;
-  border-color: #24292b !important;
-  color: #fff !important;
 }
 
 .signup-cta .btn-default,
@@ -237,7 +281,13 @@ div.signup-cta {
   color: #24292b !important;
 }
 
-/* 3) More topics / suggested — never black bar */
+.signup-cta .btn-default *,
+.signup-cta .btn-remind *,
+.signup-cta .btn-flat * {
+  color: #24292b !important;
+}
+
+/* More topics / suggested — white, never black bars */
 .more-topics__container,
 .more-topics__lists,
 .more-topics__list,
@@ -268,7 +318,6 @@ div.signup-cta {
 .more-topics__container .nav-pills > li > a {
   background: #ffffff !important;
   color: #24292b !important;
-  border: none !important;
 }
 
 .more-topics__container .nav .btn.active,
@@ -278,13 +327,10 @@ div.signup-cta {
   background: #f5f5f5 !important;
 }
 
-/* Topic map / progress / footer chrome stay light */
-.topic-map,
-.topic-map section,
-.topic-timer-info,
-.progress-bar-container,
 #topic-progress-wrapper,
-#topic-progress {
+#topic-progress,
+.progress-bar-container,
+.topic-timer-info {
   background: #ffffff !important;
   color: #24292b !important;
   border-color: var(--zk-line) !important;
@@ -311,7 +357,6 @@ body.navigation-top .fz-hero-banner,
   display: block;
 }
 
-/* Never show hero on topic pages */
 body.archetype-regular .fz-hero-banner,
 body.archetype-banner .fz-hero-banner,
 body.topic-page .fz-hero-banner {

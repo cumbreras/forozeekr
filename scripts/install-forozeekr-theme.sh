@@ -15,6 +15,35 @@ mkdir -p "${DEST}"
 [[ -f "${SRC}/assets/hero.jpg" ]] && /bin/cp -f "${SRC}/assets/hero.jpg" "${DEST}/assets/hero.jpg"
 [[ -f "${SRC}/assets/hero.png" ]] && /bin/cp -f "${SRC}/assets/hero.png" "${DEST}/assets/hero.png"
 
+# Core client.es.yml historically omits signup_cta.value_prop → English fallback.
+# Patch the live Discourse checkout (gitignored) so the main locale pack is Spanish.
+ES_LOCALE="${ROOT}/discourse/config/locales/client.es.yml"
+if [[ -f "${ES_LOCALE}" ]] && ! grep -q 'value_prop:' "${ES_LOCALE}"; then
+  python3 - "${ES_LOCALE}" <<'PY'
+import sys
+from pathlib import Path
+p = Path(sys.argv[1])
+text = p.read_text()
+needle = '    signup_cta:\n'
+idx = text.find(needle)
+if idx < 0:
+    raise SystemExit("signup_cta block missing in client.es.yml")
+# Insert value_prop after intro line if present, else after signup_cta header
+intro = text.find('intro:', idx)
+if intro > 0:
+    end = text.find("\n", intro)
+    line = (
+        '\n      value_prop: "¿Cansado de perder el hilo? Con una cuenta vuelves '
+        "justo donde lo dejaste, recibes avisos de nuevas respuestas, guardas "
+        'favoritos y das me gusta para agradecer. Entre todos hacemos mejor esta comunidad."'
+    )
+    p.write_text(text[:end] + line + text[end:])
+    print("patched client.es.yml with signup_cta.value_prop")
+else:
+    raise SystemExit("signup_cta.intro missing")
+PY
+fi
+
 docker exec -u discourse:discourse -w /src \
   -e RAILS_ENV=development \
   -e RUBY_GLOBAL_METHOD_CACHE_SIZE=131072 \
@@ -136,6 +165,7 @@ end
   o.save!
 end
 I18n.reload! rescue nil
+ExtraLocalesController.clear_cache!(all_sites: true)
 Stylesheet::Manager.clear_theme_cache! rescue nil
 
 puts "DEFAULT=#{Theme.find_default.name}"
@@ -145,6 +175,7 @@ puts "LOGO=#{SiteSetting.logo}"
 puts "HERO=#{assets["hero"]}"
 puts "HOT=#{I18n.t("js.filters.hot.title", locale: :es)}"
 puts "CTA=#{I18n.t("js.signup_cta.value_prop", locale: :es)[0,40]}"
+puts "OVERRIDES=#{ExtraLocalesController.url("overrides", locale: :es)}"
 '
 echo "Hard-refresh http://127.0.0.1:3000/"
 echo "Custom hero: themes/forozeekr/assets/hero.jpg then re-run"
